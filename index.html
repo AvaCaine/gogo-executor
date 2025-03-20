@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+<base target="_top">
+<style>
+html, body {
+    height: 100%;
+    margin: 0;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+ }   
+canvas {
+    border: 1px solid #ff75f6;
+    background-color: #ff75f6;
+}
+</style>
+<script>
+
+function startGame() {
+    myGameArea.start();
+}
+
+var myGameArea = {
+    canvas : document.createElement("canvas"),
+    start : function() {
+        this.canvas.width = 1600;
+        this.canvas.height = 800;
+        this.context = this.canvas.getContext("2d");
+        document.body.insertBefore(this.canvas, document.body.childNodes[0]);
+    }
+}
+
+</script>
+</head>
+<body>
+Website: <input type="url" id="myURL" value="" onkeydown = "if (event.keyCode == 13) document.getElementById('analyze').click()">
+<button id="analyze" onclick="download()">analyze</button> 
+<a id="abc"></a> 
+<button id="analyze1" onclick="download1()">adv_analyze</button> 
+<a id="abc1"></a>
+
+<script>
+function download () {
+function onSuccess(download) {
+var a = document.createElement('a');
+if (download[2] == 1){
+var data = new Uint8Array(download[0]);
+}else{
+var data = download[0];
+}
+var blob = new Blob([data], {'type':download[1]});
+a.href = window.URL.createObjectURL(blob);
+a.download = btoa(Math.random().toString().slice(2,8)) + "." + download[1].split("/")[1].split(";")[0];
+a.click();
+document.getElementById('myURL').value = "";
+document.getElementById('abc').innerHTML = "";
+
+}
+function onFailure(){
+document.getElementById('abc').innerHTML = "URLERROR";
+}
+document.getElementById('abc').innerHTML = "analyzing...";
+document.getElementById('abc1').innerHTML = "";
+var myRunner = google.script.run.withFailureHandler(onFailure);
+var myRunner1 = myRunner.withSuccessHandler(onSuccess);
+myRunner1.fun1(document.getElementById('myURL').value);
+}
+
+
+function download1 () {
+function onSuccess(download) {
+var a = document.createElement('a');
+if (download[2] == 1){
+var data = new Uint8Array(download[0]);
+}else{
+var data = download[0];
+}
+var blob = new Blob([data], {'type':download[1]});
+a.href = window.URL.createObjectURL(blob);
+a.download = btoa(Math.random().toString().slice(2,8)) + "." + download[1].split("/")[1].split(";")[0];
+a.click();
+document.getElementById('abc1').innerHTML = "";
+document.getElementById('myURL').value = "";
+document.getElementById('myURL').focus();
+}
+function onFailure(){
+document.getElementById('abc1').innerHTML = "ERROR";
+}
+document.getElementById('abc').innerHTML = "";
+document.getElementById('abc1').innerHTML = "analyzing...";
+var myRunner = google.script.run.withFailureHandler(onFailure);
+var myRunner1 = myRunner.withSuccessHandler(onSuccess);
+myRunner1.fun2(document.getElementById('myURL').value);
+}
+document.getElementById('myURL').focus();
+
+    </script>
+
+  </body>
+</html>
+
+
